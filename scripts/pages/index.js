@@ -2,10 +2,7 @@ import RecipesService from '../services/recipes.service.js';
 import ingredientsFactory from '../factories/ingredients.js';
 import appareilsFactory from '../factories/appareils.js';
 import ustensilsFactory from '../factories/ustensils.js';
-
-console.log(RecipesService.fetchAllIngredientsOfAllRecipes());
-console.log(RecipesService.fetchAllAppareilsOfAllRecipes());
-console.log(RecipesService.fetchAllUstensilsOfAllRecipes());
+import recipesFactory from '../factories/recipes.js';
 
 function displayListOfIngredients() {
     const ingredientsSection = document.getElementById("ingredients");
@@ -40,6 +37,23 @@ function displayListOfUstensils() {
     })
 }
 
+function displayRecipes(recipes) {
+    const recipesSection = document.querySelector('.recipes_section');
+
+    recipes.forEach((recipe) => {
+        const recipeModel = recipesFactory(recipe);
+        const recipeCardDOM = recipeModel.getRecipeCardDOM();
+        recipesSection.appendChild(recipeCardDOM);
+    })
+}
+
+function init(){
+    // Récupère les datas des recettes
+    const recipes = RecipesService.fetchAllRecipes();
+    displayRecipes(recipes);
+}
+
+init();
 displayListOfIngredients();
 displayListOfAppareils();
 displayListOfUstensils();
