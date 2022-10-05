@@ -3,15 +3,34 @@ import ingredientsFactory from '../factories/ingredients.js';
 import appareilsFactory from '../factories/appareils.js';
 import ustensilsFactory from '../factories/ustensils.js';
 import recipesFactory from '../factories/recipes.js';
+import tagsFactory from "../factories/tags.js";
+
+const ingredientsSelect = document.getElementById('ingredients')
+const appareilsSelect = document.getElementById('appareils')
+const ustensilsSelect = document.getElementById('ustensils')
+
+ingredientsSelect.addEventListener('change', function (){
+    var option = ingredientsSelect.value;
+    displayTags(option, 'ingredients');
+})
+
+appareilsSelect.addEventListener('change', function (){
+    var option = appareilsSelect.value;
+    displayTags(option, 'appareils');
+})
+
+ustensilsSelect.addEventListener('change', function (){
+    var option = ustensilsSelect.value;
+    displayTags(option, 'ustensils');
+})
 
 function displayListOfIngredients() {
     const ingredientsSection = document.getElementById("ingredients");
     const ingredients = RecipesService.fetchAllIngredientsOfAllRecipes();
 
     ingredients.forEach((ingredient) => {
-        const ingredientModel = ingredientsFactory(ingredient);
-        const ingredientDOM = ingredientModel.getIngredientListDOM();
-        ingredientsSection.appendChild(ingredientDOM);
+        const ingredientModel = ingredientsFactory(ingredient, ingredientsSection);
+        ingredientModel.getIngredientListDOM();
     })
 }
 
@@ -20,9 +39,10 @@ function displayListOfAppareils() {
     const appareils = RecipesService.fetchAllAppareilsOfAllRecipes();
 
     appareils.forEach((appareil) => {
-        const appareilModel = appareilsFactory(appareil);
-        const appareilDOM = appareilModel.getAppareilListDOM();
-        appareilsSection.appendChild(appareilDOM);
+        const appareilModel = appareilsFactory(appareil, appareilsSection);
+        appareilModel.getAppareilListDOM();
+        //appareilsSection.appendChild(appareilDOM);*/
+        //appareilsFactory(appareil, appareilsSection);
     })
 }
 
@@ -31,9 +51,9 @@ function displayListOfUstensils() {
     const ustensils = RecipesService.fetchAllUstensilsOfAllRecipes();
 
     ustensils.forEach((ustensil) => {
-        const ustensilModel = ustensilsFactory(ustensil);
-        const ustensilDOM = ustensilModel.getUstensilListDOM();
-        ustensilsSection.appendChild(ustensilDOM);
+        const ustensilModel = ustensilsFactory(ustensil, ustensilsSection);
+        ustensilModel.getUstensilListDOM();
+        //ustensilsSection.appendChild(ustensilDOM);
     })
 }
 
@@ -45,6 +65,13 @@ function displayRecipes(recipes) {
         const recipeCardDOM = recipeModel.getRecipeCardDOM();
         recipesSection.appendChild(recipeCardDOM);
     })
+}
+
+function displayTags(data, selectId) {
+    const tagsDiv = document.getElementById('tags');
+    const tagModel = tagsFactory(data, selectId);
+    const tagDOM = tagModel.getTagDOM();
+    tagsDiv.appendChild(tagDOM);
 }
 
 function init(){

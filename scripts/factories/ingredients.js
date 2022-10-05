@@ -1,10 +1,11 @@
-function ingredientsFactory(data) {
+function ingredientsFactory(data, select) {
     function getIngredientListDOM (){
-        const a = document.createElement('a');
-        a.textContent = data;
-        a.setAttribute("class", "dropdown-item text-white");
+        const option = document.createElement('option');
+        option.text = data;
+        //a.setAttribute("class", "dropdown-item text-white");
 
-        return (a);
+        select.add(option, null);
+        return (select);
     }
 
     return { getIngredientListDOM }

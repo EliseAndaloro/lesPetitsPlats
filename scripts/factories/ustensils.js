@@ -1,10 +1,11 @@
-function ustensilsFactory(data) {
+function ustensilsFactory(data, select) {
     function getUstensilListDOM (){
-        const a = document.createElement('a');
-        a.textContent = data;
-        a.setAttribute("class", "dropdown-item");
+        const option = document.createElement('option');
+        option.text = data;
+        //a.setAttribute("class", "dropdown-item");
 
-        return (a);
+        select.add(option, null);
+        return (select);
     }
 
     return { getUstensilListDOM }
