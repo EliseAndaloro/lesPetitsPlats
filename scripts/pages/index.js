@@ -1,4 +1,5 @@
 import RecipesService from '../services/recipes.service.js';
+import Search from '../services/search.service.js';
 import ingredientsFactory from '../factories/ingredients.js';
 import appareilsFactory from '../factories/appareils.js';
 import ustensilsFactory from '../factories/ustensils.js';
@@ -8,6 +9,7 @@ import tagsFactory from "../factories/tags.js";
 const ingredientsSelect = document.getElementById('ingredients')
 const appareilsSelect = document.getElementById('appareils')
 const ustensilsSelect = document.getElementById('ustensils')
+const searchBar = document.getElementById('searchBar')
 
 ingredientsSelect.addEventListener('change', function (){
     var option = ingredientsSelect.value;
@@ -74,11 +76,27 @@ function displayTags(data, selectId) {
     tagsDiv.appendChild(tagDOM);
 }
 
+function hideRecipes(){
+    var recipesSection = document.querySelector('.recipes_section');
+    var recipesCards = document.querySelectorAll('.card');
+    //console.log(recipesCards);return false;
+    recipesCards.forEach((recipeCard) => {
+        recipesSection.removeChild(recipeCard);
+    });
+    //recipesSection.removeChild(recipesCards);
+}
+
 function init(){
     // Récupère les datas des recettes
     const recipes = RecipesService.fetchAllRecipes();
     displayRecipes(recipes);
 }
+
+searchBar.addEventListener('keyup',  function () {
+    var searchRecipes = Search.searchFromSearchBar(searchBar.value);
+    hideRecipes();
+    displayRecipes(searchRecipes);
+});
 
 init();
 displayListOfIngredients();

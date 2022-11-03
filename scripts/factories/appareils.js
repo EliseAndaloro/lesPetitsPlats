@@ -1,5 +1,4 @@
 function appareilsFactory(data, select) {
-    console.log(select);
     function getAppareilListDOM (){
         const option = document.createElement('option');
         option.text = data;
