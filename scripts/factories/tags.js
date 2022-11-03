@@ -12,13 +12,16 @@ function tagsFactory(data, selectId) {
         const tag = document.createElement('button');
         if (selectId === 'ingredients') {
             tag.setAttribute("class", "btn btn-primary");
-            closeButton.setAttribute("class", "btn btn-primary text-white");
+            closeButton.setAttribute("class", "btn btn-primary text-white close-button");
+            closeButton.dataset.closeTag = data;
         } else if (selectId === 'appareils') {
             tag.setAttribute("class", "btn btn-success");
-            closeButton.setAttribute("class", "btn btn-success text-white");
+            closeButton.setAttribute("class", "btn btn-success text-white close-button");
+            closeButton.dataset.closeTag = data;
         } else {
             tag.setAttribute("class", "btn btn-danger");
-            closeButton.setAttribute("class", "btn btn-danger text-white");
+            closeButton.setAttribute("class", "btn btn-danger text-white close-button");
+            closeButton.dataset.closeTag = data;
         }
         tag.textContent = data;
 

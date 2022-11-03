@@ -3,27 +3,30 @@ import RecipesService from './recipes.service.js';
 
 class Search {
     
-    searchFromSearchBar(input) {
-        //console.log("test");
-        //var recipes = RecipesService.fetchAllRecipes();
+    searchFromSearchBar(input, recipes) {
 
-        //var searchRecipes = [];
-        //console.log(recipes)
-        for(let i = 0; recipes.length; i++){
-            var appliance = recipes[i].appliance;
-            if (appliance.indexOf(input) === -1){
-                console.log("recipes supp");
-                recipes.splice(i, 1);
+        var filteredRecipes = [];
+
+        for(let i = 0; i < recipes.length; i++){
+            if(this.strIncludes(recipes[i].appliance.toLowerCase(), input.toLowerCase().trim()) ||
+               this.strIncludes(recipes[i].description.toLowerCase(), input.toLowerCase().trim()) ||
+                recipes[i].ingredients.some((ingredient) => this.strIncludes(ingredient.ingredient.toLowerCase(), input.toLowerCase().trim()))
+            ){
+                filteredRecipes.push(recipes[i]);
             }
-            console.log(recipes);
-            
-            /*if(recipes.length === 0 ){
-                recipes = RecipesService.fetchAllAppareilsOfAllRecipes();
-            }*/
             
         }
-        return recipes;
-        console.log(recipes);
-    }
+        return filteredRecipes;
+    };
+
+    strIncludes(str1, str2) {
+        const myRegex = new RegExp(`${str2}`, "g");
+
+        if (myRegex.test(str1)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 }
 export default new Search();

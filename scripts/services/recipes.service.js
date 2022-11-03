@@ -8,7 +8,7 @@ class RecipesService {
         return recipes;
     };
 
-    fetchAllIngredientsOfAllRecipes() {
+    fetchAllIngredientsOfRecipes(recipes) {
         recipes.forEach((recipe) => {
             recipe.ingredients.forEach((ingredient) => {
                 this.ingredientsOfAllRecipes.push(ingredient.ingredient);
@@ -17,14 +17,14 @@ class RecipesService {
         return this.ingredientsOfAllRecipes.filter((ele, pos) => this.ingredientsOfAllRecipes.indexOf(ele) === pos);
     }
 
-    fetchAllAppareilsOfAllRecipes() {
+    fetchAllAppareilsOfRecipes(recipes) {
         recipes.forEach((recipe) => {
             this.appliancesOfAllRecipes.push(recipe.appliance);
         })
         return this.appliancesOfAllRecipes.filter((ele, pos) => this.appliancesOfAllRecipes.indexOf(ele) === pos);
     }
 
-    fetchAllUstensilsOfAllRecipes() {
+    fetchAllUstensilsOfRecipes(recipes) {
         recipes.forEach((recipe) => {
             recipe.ustensils.forEach((ustensil) => {
                 this.ustensilsOfAllRecipes.push(ustensil);

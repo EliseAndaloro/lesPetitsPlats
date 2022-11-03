@@ -5,30 +5,51 @@ import appareilsFactory from '../factories/appareils.js';
 import ustensilsFactory from '../factories/ustensils.js';
 import recipesFactory from '../factories/recipes.js';
 import tagsFactory from "../factories/tags.js";
+import recipes from "../../data/recipes.js";
 
 const ingredientsSelect = document.getElementById('ingredients')
 const appareilsSelect = document.getElementById('appareils')
 const ustensilsSelect = document.getElementById('ustensils')
 const searchBar = document.getElementById('searchBar')
+let filteredRecipes = [...recipes];
 
 ingredientsSelect.addEventListener('change', function (){
     var option = ingredientsSelect.value;
     displayTags(option, 'ingredients');
+    console.log(filteredRecipes);
+    filteredRecipes = Search.searchFromSearchBar(option, filteredRecipes);
+    hideRecipes();
+    displayRecipes(filteredRecipes);
+    var closeTag = document.querySelector("[data-close-tag='"+ option +"']");
+    closeTag.addEventListener('click', function (e) {
+        var index = filteredRecipes.indexOf(option);
+        if(index !== -1) {
+            filteredRecipes = filteredRecipes.splice(index, 1);
+            hideRecipes();
+            displayRecipes(filteredRecipes);
+        }
+    })
 })
 
 appareilsSelect.addEventListener('change', function (){
     var option = appareilsSelect.value;
     displayTags(option, 'appareils');
+    filteredRecipes = Search.searchFromSearchBar(option, filteredRecipes);
+    hideRecipes();
+    displayRecipes(filteredRecipes);
 })
 
 ustensilsSelect.addEventListener('change', function (){
     var option = ustensilsSelect.value;
     displayTags(option, 'ustensils');
+    filteredRecipes = Search.searchFromSearchBar(option, filteredRecipes);
+    hideRecipes();
+    displayRecipes(filteredRecipes);
 })
 
-function displayListOfIngredients() {
+function displayListOfIngredients(recipes) {
     const ingredientsSection = document.getElementById("ingredients");
-    const ingredients = RecipesService.fetchAllIngredientsOfAllRecipes();
+    const ingredients = RecipesService.fetchAllIngredientsOfRecipes(recipes);
 
     ingredients.forEach((ingredient) => {
         const ingredientModel = ingredientsFactory(ingredient, ingredientsSection);
@@ -36,9 +57,9 @@ function displayListOfIngredients() {
     })
 }
 
-function displayListOfAppareils() {
+function displayListOfAppareils(recipes) {
     const appareilsSection = document.getElementById("appareils");
-    const appareils = RecipesService.fetchAllAppareilsOfAllRecipes();
+    const appareils = RecipesService.fetchAllAppareilsOfRecipes(recipes);
 
     appareils.forEach((appareil) => {
         const appareilModel = appareilsFactory(appareil, appareilsSection);
@@ -48,9 +69,9 @@ function displayListOfAppareils() {
     })
 }
 
-function displayListOfUstensils() {
+function displayListOfUstensils(recipes) {
     const ustensilsSection = document.getElementById("ustensils");
-    const ustensils = RecipesService.fetchAllUstensilsOfAllRecipes();
+    const ustensils = RecipesService.fetchAllUstensilsOfRecipes(recipes);
 
     ustensils.forEach((ustensil) => {
         const ustensilModel = ustensilsFactory(ustensil, ustensilsSection);
@@ -79,26 +100,33 @@ function displayTags(data, selectId) {
 function hideRecipes(){
     var recipesSection = document.querySelector('.recipes_section');
     var recipesCards = document.querySelectorAll('.card');
-    //console.log(recipesCards);return false;
     recipesCards.forEach((recipeCard) => {
         recipesSection.removeChild(recipeCard);
     });
-    //recipesSection.removeChild(recipesCards);
 }
 
 function init(){
-    // Récupère les datas des recettes
-    const recipes = RecipesService.fetchAllRecipes();
     displayRecipes(recipes);
+    displayListOfIngredients(recipes);
+    displayListOfAppareils(recipes);
+    displayListOfUstensils(recipes);
 }
 
-searchBar.addEventListener('keyup',  function () {
-    var searchRecipes = Search.searchFromSearchBar(searchBar.value);
+function updateSelects(filteredRecipes) {
+    //displayListOfIngredients(filteredRecipes);
+    //displayListOfAppareils(filteredRecipes);
+    //displayListOfUstensils(filteredRecipes);
+}
+
+searchBar.addEventListener('input',  function () {
+    if (searchBar.value.trim().length >=0 && searchBar.value.trim().length <=2){
+        filteredRecipes = [...recipes];
+    }else {
+        filteredRecipes = Search.searchFromSearchBar(searchBar.value, recipes);
+    }
     hideRecipes();
-    displayRecipes(searchRecipes);
+    //updateSelects(filteredRecipes);
+    displayRecipes(filteredRecipes);
 });
 
 init();
-displayListOfIngredients();
-displayListOfAppareils();
-displayListOfUstensils();
